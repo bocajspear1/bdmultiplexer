@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 // This goroutine listens for callback connections and stores them for use on the control side
@@ -293,5 +294,6 @@ func main() {
 	go controlListener(controlPort, &listMutex, connections, connectionLocks, connectionChannels)
 	for {
 		// Endless loop!
+		time.Sleep(10 * time.Second)
 	}
 }

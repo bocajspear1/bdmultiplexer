@@ -30,6 +30,7 @@ func callbackListener(port int, mutex *sync.Mutex, connections map[string]*net.C
 
 			// Get ID for connection
 			remoteID := conn.RemoteAddr().String()
+			fmt.Println("Got connection: " + remoteID)
 
 			// TODO: Manage when connection already exists
 
@@ -64,7 +65,7 @@ func callbackListener(port int, mutex *sync.Mutex, connections map[string]*net.C
 func controlListener(port int, mutex *sync.Mutex, connections map[string]*net.Conn, connectionLocks map[string]bool, connectionChannels map[string]chan string) {
 
 	KEY := os.Args[3]
-	fmt.Println("'" + KEY + "'")
+	fmt.Println("Key is '" + KEY + "'")
 
 	server, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(port))
 
@@ -204,12 +205,17 @@ func controlListener(port int, mutex *sync.Mutex, connections map[string]*net.Co
 								response = "Usage: @unlock [<CONN>]"
 
 							}
+						} else if inCmd == "kill" {
+
+						} else if inCmd == "tag" {
+
 						} else if inCmd == "w" {
 							if currentID != "" {
 								response = "Current connection: " + currentID
 							} else {
 								response = "No connection"
 							}
+
 						} else if inCmd == "help" {
 							response = "HELP: \n"
 							response += "* @list - list connections\n"
@@ -275,13 +281,13 @@ func main() {
 
 	callbackPort, convErr := strconv.Atoi(os.Args[1])
 	if convErr != nil {
-		fmt.Println("Invalid callback port")
+		fmt.Printf("Invalid callback port: %s\n", os.Args[1])
 		return
 	}
 
 	controlPort, convErr := strconv.Atoi(os.Args[2])
 	if convErr != nil {
-		fmt.Println("Invalid control port")
+		fmt.Printf("Invalid control port: %s\n", os.Args[2])
 		return
 	}
 
